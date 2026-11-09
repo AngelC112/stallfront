@@ -2,10 +2,7 @@
 
 use App\Http\Middleware\BlockBots;
 use App\Http\Middleware\EnsurePermission;
-use App\Http\Middleware\EnsureSetupCompleted;
 use App\Http\Middleware\EnsureRole;
-use App\Http\Middleware\RunSchedulerFromWeb;
-use App\Http\Middleware\SetLocale;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -25,8 +22,6 @@ $app = Application::configure(basePath: dirname(__DIR__))
             'antibot' => BlockBots::class,
         ]);
 
-        // Language of every page: the user's choice, the visitor's choice or the browser language.
-        $middleware->web(append: [SetLocale::class, EnsureSetupCompleted::class, RunSchedulerFromWeb::class]);
 
         // Chiamate esterne senza sessione: webhook di Meta e conferme del service worker (link firmati).
         $middleware->validateCsrfTokens(except: [

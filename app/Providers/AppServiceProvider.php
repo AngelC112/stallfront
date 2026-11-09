@@ -43,6 +43,14 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Added here rather than in bootstrap/app.php, so that installations that mount
+        // only the app folders (not bootstrap/) get them too.
+        // Language of every page: the user's choice, the visitor's choice or the browser language.
+        $router = $this->app['router'];
+        $router->pushMiddlewareToGroup('web', \App\Http\Middleware\SetLocale::class);
+        $router->pushMiddlewareToGroup('web', \App\Http\Middleware\EnsureSetupCompleted::class);
+        $router->pushMiddlewareToGroup('web', \App\Http\Middleware\RunSchedulerFromWeb::class);
+
         // Chiavi WhatsApp inserite dal pannello del venditore (hanno la precedenza sulle variabili d'ambiente).
         WhatsAppConfig::apply();
 
