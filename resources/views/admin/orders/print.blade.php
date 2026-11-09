@@ -20,6 +20,7 @@
         .group { break-inside: avoid-page; }
         @media print { .toolbar { display: none; } }
     </style>
+    <x-favicon />
 </head>
 <body>
     <div class="toolbar"><button onclick="window.print()">{{ __('Stampa / Salva PDF') }}</button></div>

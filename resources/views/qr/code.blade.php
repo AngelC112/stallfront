@@ -15,6 +15,7 @@
         .btn-download { display: inline-block; margin-top: 20px; padding: 12px 20px; min-height: 44px; background: #2c3e50; color: #fff; text-decoration: none; border-radius: 6px; }
         .meta { margin-top: 30px; padding-top: 30px; border-top: 1px solid #e2e8f0; color: #888; font-size: 12px; }
     </style>
+    <x-favicon />
 </head>
 <body>
     <div class="container">
