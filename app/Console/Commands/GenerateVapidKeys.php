@@ -7,7 +7,7 @@ use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
 #[Signature('webpush:vapid')]
-#[Description(__('Genera le chiavi VAPID per le notifiche del browser da copiare nel file .env'))]
+#[Description('Generates the VAPID keys for browser notifications, to copy into the .env file')]
 class GenerateVapidKeys extends Command
 {
     public function handle(): int
