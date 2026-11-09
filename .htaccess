@@ -1,0 +1,12 @@
+# For hostings where the web root is this folder (instead of public/):
+# every request goes to public/, so the application files (.env, storage,
+# vendor...) are never reachable from the web.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^public/ - [L]
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>

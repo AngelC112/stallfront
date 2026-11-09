@@ -1,0 +1,48 @@
+# On a version tag (v1.2.3) builds the zip for shared hostings without Docker:
+# PHP dependencies and compiled assets included, ready to upload by FTP.
+name: Release zip
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, intl, gd, zip, pdo_mysql, pdo_pgsql, bcmath, exif
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies and build the assets
+        run: |
+          composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
+          composer dump-autoload --optimize --no-dev --no-scripts
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Create the zip
+        run: |
+          name="stallfront-${GITHUB_REF_NAME}"
+          mkdir -p "dist/$name"
+          rsync -a ./ "dist/$name/" \
+            --exclude .git --exclude .github --exclude node_modules --exclude dist \
+            --exclude tests --exclude docker --exclude Dockerfile --exclude docker-compose.yml \
+            --exclude .dockerignore --exclude phpunit.xml --exclude 'storage/logs/*.log'
+          (cd dist && zip -qr "$name.zip" "$name")
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          generate_release_notes: true
+
