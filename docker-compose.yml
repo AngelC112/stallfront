@@ -17,6 +17,10 @@ services:
       # APP_LOCALE: "en"                   # language when the browser one is not supported
       # APP_CURRENCY: "EUR"
 
+      # Behind a reverse proxy: see docker-compose.proxy.yml and the README.
+      # Addresses allowed to set X-Forwarded-* (default: private networks).
+      # TRUSTED_PROXIES: "172.16.0.0/12"
+
       # Email (without these, emails are only written to the log)
       # MAIL_MAILER: "smtp"
       # MAIL_HOST: "smtp.example.com"

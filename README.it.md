@@ -66,6 +66,44 @@ Collega un dataset o una cartella persistente a `/data` e la porta web a `80`.
 Metti il sito dietro il tuo reverse proxy con HTTPS: servono alla fotocamera per
 il QR e alle notifiche del browser.
 
+### Porta diretta o reverse proxy
+
+Funzionano entrambi i modi, scegline uno:
+
+- **Porta diretta** (predefinito): il sito risponde su `http://<host>:8080`.
+  Non serve altro. Va bene su una rete fidata o per una prima prova; la
+  fotocamera per il QR e le notifiche del browser richiedono HTTPS, quindi
+  per l'uso reale metti davanti un proxy.
+- **Solo attraverso un reverse proxy**: la porta non viene pubblicata e solo
+  il proxy raggiunge il container, su una rete Docker condivisa:
+
+  ```bash
+  docker network create proxy
+  curl -O https://raw.githubusercontent.com/AngelC112/stallfront/main/docker-compose.proxy.yml
+  docker compose -f docker-compose.yml -f docker-compose.proxy.yml up -d
+  ```
+
+  Punta il proxy a `http://stallfront:80` e imposta `APP_URL` con l'indirizzo
+  pubblico `https://`. Dove si incolla un solo YAML (TrueNAS, Portainer),
+  togli le righe `ports:`, aggiungi `networks: [default, proxy]` al servizio
+  e questo blocco in fondo:
+
+  ```yaml
+  networks:
+    proxy:
+      external: true
+  ```
+
+L'indirizzo reale del visitatore e l'HTTPS vengono letti dalle intestazioni
+`X-Forwarded-*` solo quando la richiesta arriva da questa macchina o da una
+rete privata, cioè da dove sta normalmente un proxy. Se il tuo ha un altro
+indirizzo, indicalo in `TRUSTED_PROXIES` (IP o intervalli CIDR separati da
+virgola; `*` si fida di chiunque ed è sicuro solo se il sito non è
+raggiungibile senza passare dal proxy). È una variabile d'ambiente: impostala
+sotto `environment:` in Docker, oppure con `SetEnv TRUSTED_PROXIES "*"` nel
+file `.htaccess` su un hosting condiviso il cui front end HTTPS ha un
+indirizzo pubblico.
+
 ### Impostazioni consigliate
 
 ```yaml

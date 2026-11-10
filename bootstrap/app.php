@@ -15,17 +15,20 @@ $app = Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Only the reverse proxy may set X-Forwarded-* headers. Trusting every
-        // sender ('*') lets any client fake its IP address and so bypass the
-        // per-IP rate limits (login attempts included). The default covers
-        // loopback and the Docker bridge networks the proxy reaches the
-        // container from; override it with TRUSTED_PROXIES (comma-separated
-        // IP addresses or CIDR ranges).
+        // Only a reverse proxy may set the X-Forwarded-* headers. Trusting every
+        // sender ('*') would let any visitor fake its IP address and so bypass
+        // the per-IP rate limits (login attempts included). By default the
+        // proxy is expected on the same machine or on a private network
+        // (Docker, LAN); a visitor coming straight from the internet has a
+        // public address and is never trusted. TRUSTED_PROXIES replaces the
+        // list: comma-separated IP addresses or CIDR ranges, or * for all.
         $trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? getenv('TRUSTED_PROXIES');
-        $middleware->trustProxies(at: array_values(array_filter(array_map(
-            'trim',
-            explode(',', is_string($trustedProxies) && $trustedProxies !== '' ? $trustedProxies : '127.0.0.1,172.16.0.0/12'),
-        ))));
+        if (! is_string($trustedProxies) || trim($trustedProxies) === '') {
+            $trustedProxies = '127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,::1,fc00::/7';
+        }
+        $middleware->trustProxies(at: trim($trustedProxies) === '*'
+            ? '*'
+            : array_values(array_filter(array_map('trim', explode(',', $trustedProxies)))));
         $middleware->alias([
             'role' => EnsureRole::class,
             'permission' => EnsurePermission::class,

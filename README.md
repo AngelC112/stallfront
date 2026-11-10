@@ -66,6 +66,43 @@ persistent dataset or folder to `/data` and the web port to `80`. Put the site
 behind your reverse proxy with HTTPS: the camera for QR scanning and browser
 notifications need it.
 
+### Direct port or reverse proxy
+
+Both ways work, pick one:
+
+- **Direct port** (default): the site answers on `http://<host>:8080`. Nothing
+  else to set up. Use it on a trusted network or for a first try; the camera
+  for QR scanning and browser notifications need HTTPS, so for real use put a
+  proxy in front.
+- **Only through a reverse proxy**: the port is not published and only the
+  proxy can reach the container, over a shared Docker network:
+
+  ```bash
+  docker network create proxy
+  curl -O https://raw.githubusercontent.com/AngelC112/stallfront/main/docker-compose.proxy.yml
+  docker compose -f docker-compose.yml -f docker-compose.proxy.yml up -d
+  ```
+
+  Point the proxy to `http://stallfront:80` and set `APP_URL` to the public
+  `https://` address. Where you paste a single YAML (TrueNAS, Portainer),
+  remove the `ports:` lines, add `networks: [default, proxy]` to the service
+  and this block at the end:
+
+  ```yaml
+  networks:
+    proxy:
+      external: true
+  ```
+
+The real visitor address and HTTPS are read from the `X-Forwarded-*` headers
+only when the request comes from this machine or a private network, which is
+where a proxy normally sits. If yours has a different address, list it in
+`TRUSTED_PROXIES` (comma-separated IPs or CIDR ranges; `*` trusts everyone and
+is safe only when the site cannot be reached without the proxy). It is an
+environment variable: set it under `environment:` in Docker, or with
+`SetEnv TRUSTED_PROXIES "*"` in the `.htaccess` on a shared hosting whose
+HTTPS front end has a public address.
+
 ### Recommended settings
 
 ```yaml
