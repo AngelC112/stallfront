@@ -10,6 +10,7 @@ use App\Models\ProductOptionValue;
 use App\Models\ProductPhoto;
 use App\Models\ProductVariant;
 use App\Services\BackInStockNotifier;
+use App\Support\Permission;
 use App\Support\SlugGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -164,6 +165,8 @@ class ProductAdminController extends Controller
 
     public function edit(Product $product): View
     {
+        $this->authorizeProduct($product);
+
         $categories = Category::active()->ordered()->pluck('name', 'id');
 
         $product->load([
@@ -215,6 +218,8 @@ class ProductAdminController extends Controller
 
     public function update(Request $request, Product $product): RedirectResponse
     {
+        $this->authorizeProduct($product);
+
         $validated = $this->validateProduct($request, $product->id);
         $wasOrderable = $product->isOrderable();
 
@@ -289,6 +294,8 @@ class ProductAdminController extends Controller
 
     public function destroy(Product $product): RedirectResponse
     {
+        $this->authorizeProduct($product);
+
         foreach ($product->photos as $photo) {
             Storage::disk($photo->disk)->delete($photo->path);
 
@@ -302,6 +309,21 @@ class ProductAdminController extends Controller
         return redirect()
             ->route('admin.products.index')
             ->with('success', __('Prodotto eliminato.'));
+    }
+
+    /**
+     * A collaborator may change or delete a product created by someone else
+     * only with the dedicated permission. The seller holds every permission.
+     */
+    private function authorizeProduct(Product $product): void
+    {
+        $user = auth()->user();
+
+        abort_unless(
+            (int) $product->created_by === (int) $user->id
+            || $user->hasPermission(Permission::PRODUCTS_MANAGE_OTHERS),
+            403,
+        );
     }
 
     protected function validateProduct(Request $request, ?int $ignoreId = null): array

@@ -62,6 +62,7 @@
                             @endif
 
                             {{-- Prodotti --}}
+                            @if (auth()->user()->hasPermission(\App\Support\Permission::PRODUCTS_MANAGE))
                             <li>
                                 <a href="{{ route('admin.products.index') }}" 
                                    class="{{ request()->routeIs('admin.products.*') ? 'bg-white/15 text-white font-semibold' : 'text-white/85 hover:bg-white/10 hover:text-white' }} group flex gap-x-3 rounded-xl p-2 leading-6 font-medium">
@@ -69,8 +70,10 @@
                                     {{ __('Prodotti') }}
                                 </a>
                             </li>
+                            @endif
 
                             {{-- Categorie --}}
+                            @if (auth()->user()->hasPermission(\App\Support\Permission::CATEGORIES_MANAGE))
                             <li>
                                 <a href="{{ route('admin.categories.index') }}" 
                                    class="{{ request()->routeIs('admin.categories.*') ? 'bg-white/15 text-white font-semibold' : 'text-white/85 hover:bg-white/10 hover:text-white' }} group flex gap-x-3 rounded-xl p-2 leading-6 font-medium">
@@ -78,6 +81,7 @@
                                     {{ __('Categorie') }}
                                 </a>
                             </li>
+                            @endif
                             
                                      {{-- Mercati --}}
                                      @if (auth()->user()->hasPermission(\App\Support\Permission::SETTINGS_MANAGE))
@@ -228,8 +232,12 @@
                      @if (auth()->user()->hasPermission(\App\Support\Permission::COUNTER_USE))
                          <li><a href="{{ route('admin.banco.index') }}" class="block rounded-xl px-3 py-2 text-base font-medium {{ request()->routeIs('admin.banco.*') ? 'bg-white/15 text-white font-semibold' : 'text-white/85 hover:bg-white/10' }}">{{ __('Banco') }}</a></li>
                      @endif
+                     @if (auth()->user()->hasPermission(\App\Support\Permission::PRODUCTS_MANAGE))
                      <li><a href="{{ route('admin.products.index') }}" class="block rounded-xl px-3 py-2 text-base font-medium {{ request()->routeIs('admin.products.*') ? 'bg-white/15 text-white font-semibold' : 'text-white/85 hover:bg-white/10' }}">{{ __('Prodotti') }}</a></li>
+                     @endif
+                     @if (auth()->user()->hasPermission(\App\Support\Permission::CATEGORIES_MANAGE))
                      <li><a href="{{ route('admin.categories.index') }}" class="block rounded-xl px-3 py-2 text-base font-medium {{ request()->routeIs('admin.categories.*') ? 'bg-white/15 text-white font-semibold' : 'text-white/85 hover:bg-white/10' }}">{{ __('Categorie') }}</a></li>
+                     @endif
                      @if (auth()->user()->hasPermission(\App\Support\Permission::SETTINGS_MANAGE))
                          <li><a href="{{ route('admin.markets.index') }}" class="block rounded-xl px-3 py-2 text-base font-medium {{ request()->routeIs('admin.markets.*') ? 'bg-white/15 text-white font-semibold' : 'text-white/85 hover:bg-white/10' }}">{{ __('Mercati') }}</a></li>
                      @endif
@@ -299,14 +307,18 @@
                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
                  <span class="text-xs">{{ __('Home') }}</span>
              </a>
+             @if (auth()->user()->hasPermission(\App\Support\Permission::PRODUCTS_MANAGE))
              <a href="{{ route('admin.products.index') }}" class="flex flex-col items-center gap-1 p-2 {{ request()->routeIs('admin.products.*') ? 'text-brand-600' : 'text-gray-500' }}">
                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
                  <span class="text-xs">{{ __('Prodotti') }}</span>
              </a>
+             @endif
+              @if (auth()->user()->hasPermission(\App\Support\Permission::CATEGORIES_MANAGE))
               <a href="{{ route('admin.categories.index') }}" class="flex flex-col items-center gap-1 p-2 {{ request()->routeIs('admin.categories.*') ? 'text-brand-600' : 'text-gray-500' }}">
                  <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" /></svg>
                  <span class="text-xs">{{ __('Cat.') }}</span>
              </a>
+              @endif
              <a href="{{ route('home') }}" class="flex flex-col items-center gap-1 p-2 text-gray-500 hover:text-brand-600">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.125 1.125 0 011.592 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75" /></svg>
                 <span class="text-xs">{{ __('Vetrina') }}</span>

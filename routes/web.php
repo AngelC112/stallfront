@@ -170,7 +170,9 @@ Route::middleware(['auth', 'verified', 'role:seller,collaborator'])
             ->middleware('permission:dashboard.view')->name('dashboard');
 
         // Categorie
-        Route::resource('categories', CategoryAdminController::class)->except(['show']);
+        Route::resource('categories', CategoryAdminController::class)
+            ->except(['show'])
+            ->middleware('permission:categories.manage');
 
         // Mercati e calendario di ritiro
         Route::resource('markets', MarketAdminController::class)
@@ -184,7 +186,9 @@ Route::middleware(['auth', 'verified', 'role:seller,collaborator'])
             ->name('closures.destroy');
 
         // Prodotti
-        Route::resource('products', ProductAdminController::class)->except(['show']);
+        Route::resource('products', ProductAdminController::class)
+            ->except(['show'])
+            ->middleware('permission:products.manage');
 
         // Ordini
         Route::get('/orders', [OrderAdminController::class, 'index'])->name('orders.index');
