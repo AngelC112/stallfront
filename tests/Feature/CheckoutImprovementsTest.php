@@ -112,7 +112,7 @@ class CheckoutImprovementsTest extends TestCase
         $this->actingAs($customer)
             ->post(route('account.orders.reorder', ['order' => $order->order_number]))
             ->assertRedirect(route('cart.index'))
-            ->assertSessionHas('status', '1 prodotti aggiunti al carrello. 1 non sono più disponibili.');
+            ->assertSessionHas('status', '1 prodotto aggiunto al carrello. 1 non è più disponibile.');
 
         $this->assertSame(2, $customer->fresh()->cart[$available->id.':0']['quantity']);
     }

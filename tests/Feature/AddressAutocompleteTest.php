@@ -75,7 +75,8 @@ class AddressAutocompleteTest extends TestCase
         $this->post(route('register'), $this->registration(['address_search' => 'Via Inventata 99, Roma']))
             ->assertSessionHasErrors('address_search');
 
-        $this->post(route('register'), $this->registration(['city' => 'Milano'] + $address))
+        // The picked address is in Milano: another city no longer matches the signature.
+        $this->post(route('register'), $this->registration(['city' => 'Napoli'] + $address))
             ->assertSessionHasErrors('address_search');
         $this->assertDatabaseMissing('users', ['email' => 'anna@example.com']);
     }

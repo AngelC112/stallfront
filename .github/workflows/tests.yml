@@ -20,6 +20,17 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci --no-audit --no-fund && npm run build
-      - run: php artisan test
+      - name: Run the tests
+        run: |
+          set -o pipefail
+          vendor/bin/phpunit --display-warnings --display-deprecations 2>&1 | tee phpunit.log
         env:
           APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+      # Warnings do not fail the run and are easy to miss in the log:
+      # the first ones are repeated as annotations on the run page.
+      - name: Show the first warnings as annotations
+        if: always()
+        run: |
+          [ -f phpunit.log ] || exit 0
+          grep -E -A1 '^[0-9]+\) /' phpunit.log | grep -v '^--$' | paste -d' ' - - | sort -u | head -n 8 \
+            | while IFS= read -r line; do echo "::warning::${line}"; done

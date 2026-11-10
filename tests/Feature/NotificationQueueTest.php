@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Mail\TemplatedMail;
+use App\Models\LocalizedText;
 use App\Models\Market;
 use App\Models\NotificationEventSetting;
 use App\Models\NotificationQueueItem;
@@ -63,10 +64,9 @@ class NotificationQueueTest extends TestCase
 
     public function test_custom_template_overrides_default(): void
     {
-        NotificationEventSetting::create([
-            'event' => 'order_preparing', 'is_active' => true, 'importance' => 'customer_choice',
-            'subject' => 'Ci siamo {nome}', 'body' => 'Ordine {codice_ordine} in lavorazione',
-        ]);
+        // The texts written by the seller are stored per language.
+        NotificationEventSetting::create(['event' => 'order_preparing', 'is_active' => true, 'importance' => 'customer_choice']);
+        LocalizedText::put('notification.order_preparing', 'it', 'Ci siamo {nome}', 'Ordine {codice_ordine} in lavorazione');
         $order = $this->makeOrder(Order::STATUS_RECEIVED);
 
         app(OrderStatusService::class)->transition($order, Order::STATUS_PREPARING, OrderStatusService::ACTOR_STAFF);
@@ -146,16 +146,19 @@ class NotificationQueueTest extends TestCase
 
         $this->actingAs($seller)
             ->put(route('admin.notifications.update', 'order_ready'), [
+                'locale' => 'it',
                 'subject' => 'Pronto {codice_ordine}',
                 'body' => 'Ritira {codice_ordine}',
                 'importance' => 'customer_choice',
                 'is_active' => '1',
             ])
-            ->assertRedirect(route('admin.notifications.texts'));
+            ->assertRedirect(route('admin.notifications.edit', ['event' => 'order_ready', 'lang' => 'it']));
 
-        $setting = NotificationEventSetting::findOrFail('order_ready');
-        $this->assertSame('Pronto {codice_ordine}', $setting->subject);
-        $this->assertSame('customer_choice', $setting->importance);
+        $this->assertSame('customer_choice', NotificationEventSetting::findOrFail('order_ready')->importance);
+        $this->assertSame(
+            ['title' => 'Pronto {codice_ordine}', 'body' => 'Ritira {codice_ordine}'],
+            LocalizedText::find('notification.order_ready', 'it'),
+        );
     }
 
     public function test_collaborator_without_settings_permission_cannot_edit_notifications(): void
