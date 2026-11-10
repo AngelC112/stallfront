@@ -359,7 +359,7 @@
             return new Promise(function (resolve, reject) {
                 if (window.jsQR) { resolve(); return; }
                 var script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js';
+                script.src = @js(asset('js/jsQR-1.4.0.js'));
                 script.onload = resolve;
                 script.onerror = reject;
                 document.head.appendChild(script);

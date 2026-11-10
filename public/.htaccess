@@ -23,3 +23,20 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<IfModule mod_headers.c>
+    # Do not advertise the PHP version.
+    Header unset X-Powered-By
+    Header always unset X-Powered-By
+
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Content Security Policy: code, styles and requests only from this site.
+    # 'unsafe-inline' and 'unsafe-eval' stay because the pages use inline
+    # scripts and Alpine.js expressions; the fonts come from fonts.bunny.net;
+    # img-src allows https for the remote images of the emails shown in the
+    # email log. No other site can supply scripts any more.
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.bunny.net; font-src 'self' data: https://fonts.bunny.net; img-src 'self' data: blob: https:; connect-src 'self'; worker-src 'self'; frame-src 'self'; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+</IfModule>
