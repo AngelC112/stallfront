@@ -65,5 +65,8 @@ EXPOSE 80
 HEALTHCHECK --interval=30s --timeout=5s --start-period=90s --retries=3 \
     CMD php -r 'exit(@file_get_contents("http://127.0.0.1/up") === false ? 1 : 0);'
 
+# The entrypoint script is process 1 and stops Apache and MariaDB in order
+# on SIGTERM; the base image's SIGWINCH would be ignored by it.
+STOPSIGNAL SIGTERM
 ENTRYPOINT ["stallfront-entrypoint"]
 CMD ["apache2-foreground"]

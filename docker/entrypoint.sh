@@ -178,17 +178,35 @@ chmod 0644 /etc/cron.d/stallfront
 service cron start > /dev/null
 
 # ── Apache in the foreground, clean shutdown of both services ──
+# "docker stop" sends SIGTERM to this script (process 1): the Dockerfile
+# sets STOPSIGNAL SIGTERM, because the SIGWINCH of the php:apache base
+# image is ignored by bash and the container would only stop when Docker
+# kills it, MariaDB included.
+# Order: Apache first (requests in progress get up to 5 seconds), then
+# MariaDB, so no request is left without its database.
 shutdown() {
+  local status="${1:-0}"
+  trap - TERM INT
   log "Stopping"
-  [ -n "${APACHE_PID:-}" ] && kill -WINCH "$APACHE_PID" 2> /dev/null || true
+  if [ -n "${APACHE_PID:-}" ] && kill -0 "$APACHE_PID" 2> /dev/null; then
+    kill -WINCH "$APACHE_PID" 2> /dev/null || true
+    for _ in $(seq 1 50); do
+      kill -0 "$APACHE_PID" 2> /dev/null || break
+      sleep 0.1
+    done
+    kill -TERM "$APACHE_PID" 2> /dev/null || true
+  fi
   if [ -n "$MARIADB_PID" ]; then
     mariadb-admin --socket="$SOCKET" shutdown > /dev/null 2>&1 || true
   fi
   wait || true
-  exit 0
+  exit "$status"
 }
 trap shutdown TERM INT
 
 "$@" &
 APACHE_PID=$!
-wait "$APACHE_PID"
+# Apache exiting on its own also stops MariaDB cleanly
+status=0
+wait "$APACHE_PID" || status=$?
+shutdown "$status"
