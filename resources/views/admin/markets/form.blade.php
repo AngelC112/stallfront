@@ -24,18 +24,18 @@
             <h2 class="text-lg font-bold text-gray-900 mb-6">{{ __('Dove e quando') }}</h2>
             <div class="grid gap-6 sm:grid-cols-2">
                 <div class="sm:col-span-2">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Nome del mercato') }}</label>
-                    <input type="text" name="name" value="{{ old('name', $market->name) }}" required maxlength="160" class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
+                    <label for="market-name" class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Nome del mercato') }}</label>
+                    <input type="text" name="name" id="market-name" value="{{ old('name', $market->name) }}" required maxlength="160" class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
                 </div>
 
                 <div class="sm:col-span-2">
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Luogo') }}</label>
-                    <input type="text" name="location" value="{{ old('location', $market->location) }}" required maxlength="255" placeholder="{{ __('Indirizzo o punto di riferimento') }}" class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
+                    <label for="market-location" class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Luogo') }}</label>
+                    <input type="text" name="location" id="market-location" value="{{ old('location', $market->location) }}" required maxlength="255" placeholder="{{ __('Indirizzo o punto di riferimento') }}" class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Giorno settimanale') }}</label>
-                    <select name="weekday" required class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
+                    <label for="market-weekday" class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Giorno settimanale') }}</label>
+                    <select name="weekday" id="market-weekday" required class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
                         <option value="">{{ __('Seleziona un giorno') }}</option>
                         @foreach ([1 => __('Lunedì'), 2 => __('Martedì'), 3 => __('Mercoledì'), 4 => __('Giovedì'), 5 => __('Venerdì'), 6 => __('Sabato'), 7 => __('Domenica')] as $weekday => $label)
                             <option value="{{ $weekday }}" @selected((string) old('weekday', $market->weekday) === (string) $weekday)>{{ $label }}</option>
@@ -44,9 +44,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Anticipo minimo per ordinare') }}</label>
+                    <label for="market-minimum-order-days" class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Anticipo minimo per ordinare') }}</label>
                     <div class="flex items-center gap-3">
-                        <input type="number" name="minimum_order_days" min="0" max="60" value="{{ old('minimum_order_days', $market->minimum_order_days ?? 3) }}" required class="block w-24 rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
+                        <input type="number" name="minimum_order_days" id="market-minimum-order-days" min="0" max="60" value="{{ old('minimum_order_days', $market->minimum_order_days ?? 3) }}" required class="block w-24 rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
                         <span class="text-sm font-medium text-gray-500">{{ __('giorni') }}</span>
                     </div>
                 </div>
@@ -57,25 +57,25 @@
             <h2 class="text-lg font-bold text-gray-900 mb-6">{{ __('Orari limite') }}</h2>
             <div class="grid gap-6 sm:grid-cols-2">
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Ordine entro') }}</label>
-                    <input type="time" name="order_cutoff_time" value="{{ old('order_cutoff_time', $market->order_cutoff_time ? substr($market->order_cutoff_time, 0, 5) : '') }}" required class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
+                    <label for="market-order-cutoff" class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Ordine entro') }}</label>
+                    <input type="time" name="order_cutoff_time" id="market-order-cutoff" value="{{ old('order_cutoff_time', $market->order_cutoff_time ? substr($market->order_cutoff_time, 0, 5) : '') }}" required class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Ritiro entro') }}</label>
-                    <input type="time" name="pickup_cutoff_time" value="{{ old('pickup_cutoff_time', $market->pickup_cutoff_time ? substr($market->pickup_cutoff_time, 0, 5) : '') }}" required class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
+                    <label for="market-pickup-cutoff" class="block text-sm font-semibold text-gray-700 mb-1">{{ __('Ritiro entro') }}</label>
+                    <input type="time" name="pickup_cutoff_time" id="market-pickup-cutoff" value="{{ old('pickup_cutoff_time', $market->pickup_cutoff_time ? substr($market->pickup_cutoff_time, 0, 5) : '') }}" required class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-petrol focus:ring-petrol">
                 </div>
             </div>
             <p class="mt-4 text-sm text-gray-500 italic">{{ __('L’orario limite per ordinare determina fino a quando il cliente può scegliere una data di ritiro.') }}</p>
         </section>
 
         <section class="rounded-xl bg-white p-6 border border-gray-200 sm:p-8">
-            <div class="flex items-center gap-3">
+            <label class="flex cursor-pointer items-center gap-3">
                 <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $market->is_active ?? true)) class="h-5 w-5 rounded border-gray-300 text-petrol focus:ring-petrol">
-                <div>
+                <span class="block">
                     <span class="block text-base font-bold text-gray-900">{{ __('Mercato attivo') }}</span>
                     <span class="block text-sm text-gray-500">{{ __('Solo i mercati attivi compariranno come date selezionabili nel checkout.') }}</span>
-                </div>
-            </div>
+                </span>
+            </label>
         </section>
 
         @if ($market->exists && auth()->user()->hasPermission(\App\Support\Permission::CLOSURES_HOLIDAYS_MANAGE))

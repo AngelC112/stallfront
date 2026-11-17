@@ -41,7 +41,7 @@
             {{-- Foto --}}
             <div class="h-16 w-16 shrink-0">
                 @if($url = $prod->coverPhotoUrl())
-                    <img src="{{ $url }}" alt="" class="h-full w-full rounded-xl object-cover bg-gray-100">
+                    <img src="{{ $url }}" alt="" width="64" height="64" loading="lazy" decoding="async" class="h-full w-full rounded-xl object-cover bg-gray-100">
                 @else
                     <div class="flex h-full w-full items-center justify-center rounded-xl bg-gray-200 text-xs text-gray-400">{{ __('No Img') }}</div>
                 @endif
@@ -108,7 +108,7 @@
                 <td class="whitespace-nowrap px-6 py-4">
                     <a href="{{ route('admin.products.edit', $prod) }}" class="block">
                         @if($url = $prod->coverPhotoUrl())
-                            <img src="{{ $url }}" alt="" class="h-10 w-10 rounded object-cover bg-gray-100">
+                            <img src="{{ $url }}" alt="" width="40" height="40" loading="lazy" decoding="async" class="h-10 w-10 rounded object-cover bg-gray-100">
                         @else
                             <div class="flex h-10 w-10 items-center justify-center rounded bg-gray-200 text-xs text-gray-400">{{ __('No Img') }}</div>
                         @endif
@@ -120,7 +120,7 @@
                     </a>
                 </td>
                 <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{{ $prod->category->name ?? '-' }}</td>
-                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-900">{{ \App\Support\Format::money($prod->price_cents) }}</td>
+                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-900 tabular-nums">{{ \App\Support\Format::money($prod->price_cents) }}</td>
                 <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
                     @if(!$prod->track_stock)
                         <span class="italic text-gray-400">{{ __('Senza stock') }}</span>

@@ -37,7 +37,7 @@
             <template x-for="(item, index) in results" :key="index">
                 <li role="option">
                     <button type="button" @click="choose(item)"
-                            class="block min-h-11 w-full px-4 py-2 text-left text-sm text-gray-900 hover:bg-brand-50 focus:bg-brand-50 focus:outline-none"
+                            class="block min-h-11 w-full px-4 py-2 text-left text-sm text-gray-900 hover:bg-brand-50 focus:bg-brand-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-600"
                             x-text="item.label"></button>
                 </li>
             </template>

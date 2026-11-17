@@ -10,7 +10,7 @@
     <body class="bg-canvas text-gray-900 antialiased">
         <x-store-header :cart-count="$cartCount" />
 
-        <main class="mx-auto max-w-6xl px-4 py-5 sm:px-5 sm:py-6">
+        <main id="contenuto" class="mx-auto max-w-6xl px-4 py-5 sm:px-5 sm:py-6">
             @if (session('status'))
                 <p class="mb-5 rounded-xl bg-emerald-100 px-4 py-3 text-sm font-medium text-emerald-800">{{ session('status') }}</p>
             @endif
@@ -124,7 +124,7 @@
                     @if ($primaryImage)
                         <div class="relative flex aspect-[4/3] max-h-[560px] items-center justify-center overflow-hidden rounded-xl bg-white/40 sm:aspect-[5/4] lg:aspect-[4/3]">
                             <button type="button" @click="openLightbox()" aria-label="{{ __('Apri immagine a tutto schermo') }}" title="{{ __('Apri immagine a tutto schermo') }}" class="flex h-full w-full cursor-zoom-in items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-600">
-                                <img x-bind:src="selectedImage" src="{{ $primaryImage }}" x-bind:alt="images.find((image) => image.url === selectedImage)?.alt || productName" class="h-full w-full object-contain" />
+                                <img x-bind:src="selectedImage" src="{{ $primaryImage }}" x-bind:alt="images.find((image) => image.url === selectedImage)?.alt || productName" width="1200" height="900" fetchpriority="high" class="h-full w-full object-contain" />
                             </button>
                             @if ($images->count() > 1)
                                 <button type="button" @click="moveImage(-1)" aria-label="{{ __('Foto precedente') }}" title="{{ __('Foto precedente') }}" class="absolute left-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-2xl text-brand-700 shadow-sm transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-700">←</button>
@@ -159,7 +159,7 @@
                                     class="h-16 w-16 shrink-0 overflow-hidden rounded-xl border bg-white transition focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 sm:h-20 sm:w-20"
                                     :class="selectedImage === '{{ $image->url }}' ? 'border-brand-600 ring-2 ring-brand-600/20' : 'border-brand-200'"
                                 >
-                                    <img src="{{ $image->thumbUrl() }}" alt="" class="h-full w-full object-cover" />
+                                    <img src="{{ $image->thumbUrl() }}" alt="" width="80" height="80" loading="lazy" decoding="async" class="h-full w-full object-cover" />
                                 </button>
                             @endforeach
                         </div>

@@ -157,9 +157,9 @@
                                     <div class="flex flex-wrap items-center gap-2">
                                         <template x-for="(type, tIndex) in form.types" :key="tIndex">
                                             <span class="inline-flex items-center gap-1 rounded-full border border-gray-300 bg-white px-3 py-1 text-sm font-medium text-gray-900">
-                                                <input type="text" x-model="type.name" placeholder="{{ __('Nome') }}"
+                                                <input type="text" x-model="type.name" placeholder="{{ __('Nome') }}" :aria-label="@js(__('Nome caratteristica :number')).replace(':number', tIndex + 1)"
                                                        class="w-24 border-0 bg-transparent p-0 text-sm focus:ring-0">
-                                                <button type="button" @click="removeType(tIndex)" class="text-gray-400 hover:text-red-600">{{ __('×') }}</button>
+                                                <button type="button" @click="removeType(tIndex)" :aria-label="@js(__('Rimuovi caratteristica :number')).replace(':number', tIndex + 1)" class="text-gray-400 hover:text-red-600">{{ __('×') }}</button>
                                                 <input type="hidden" :name="'option_types['+tIndex+'][name]'" :value="type.name">
                                             </span>
                                         </template>
@@ -197,9 +197,9 @@
                                             <template x-for="(variant, vIndex) in form.variants" :key="vIndex">
                                                 <tr>
                                                     <td class="px-3 py-2">
-														<button type="button" @click="openPhotoPicker(vIndex)"
+														<button type="button" @click="openPhotoPicker(vIndex)" aria-label="{{ __('Scegli la foto della variante') }}"
 																class="h-12 w-12 overflow-hidden rounded border border-gray-200 bg-gray-100 hover:border-brand-400">
-															<img x-show="variantPhotoUrl(variant)" :src="variantPhotoUrl(variant)" class="h-full w-full object-cover">
+															<img x-show="variantPhotoUrl(variant)" :src="variantPhotoUrl(variant)" alt="" width="48" height="48" class="h-full w-full object-cover">
 															<span x-show="!variantPhotoUrl(variant)" class="flex h-full w-full items-center justify-center text-[10px] text-gray-400">{{ __('Scegli') }}</span>
 														</button>
 														<input type="hidden" :name="'variants['+vIndex+'][photo_index]'" :value="variant.photoIndex ?? ''">
@@ -207,6 +207,7 @@
                                                     <template x-for="(type, tIndex) in form.types" :key="'td'+tIndex+vIndex">
                                                         <td class="px-3 py-2">
                                                             <input type="text" list="datalist-type-'+tIndex"
+                                                                   :aria-label="type.name || @js(__('Caratt. :number')).replace(':number', tIndex + 1)"
                                                                    :value="variant.parts[tIndex] || ''"
                                                                    @input="variant.parts[tIndex] = $event.target.value; refreshVariantLabel(variant)"
                                                                    class="w-28 rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm">
@@ -219,7 +220,7 @@
                                                         </td>
                                                     </template>
                                                     <td class="px-3 py-2">
-                                                        <input type="number" step="0.01" min="0"
+                                                        <input type="number" step="0.01" min="0" aria-label="{{ __('Prezzo (€)') }}"
                                                                :value="(form.priceDisplay || 0) + (Number(variant.priceExtra) || 0)"
                                                                @input="variant.priceExtra = (Number($event.target.value) || 0) - (Number(form.priceDisplay) || 0)"
                                                                class="w-24 rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm"
@@ -227,7 +228,7 @@
                                                         <input type="hidden" :name="'variants['+vIndex+'][price_extra]'" :value="variant.priceExtra">
                                                     </td>
                                                     <td class="px-3 py-2">
-                                                        <input type="number" min="0" :name="'variants['+vIndex+'][stock]'" x-model.number="variant.stock"
+                                                        <input type="number" min="0" :name="'variants['+vIndex+'][stock]'" x-model.number="variant.stock" aria-label="{{ __('Pezzi') }}"
                                                                class="w-16 rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm">
                                                     </td>
                                                     <td class="px-3 py-2">
@@ -237,7 +238,7 @@
                                                         </label>
                                                     </td>
                                                     <td class="px-3 py-2 text-right">
-                                                        <button type="button" @click="removeVariant(vIndex)" class="cursor-pointer rounded bg-red-500 px-2 py-1 text-xs font-semibold text-white hover:bg-red-600">x</button>
+                                                        <button type="button" @click="removeVariant(vIndex)" aria-label="{{ __('Rimuovi variante') }}" class="cursor-pointer rounded bg-red-500 px-2 py-1 text-xs font-semibold text-white hover:bg-red-600">x</button>
                                                     </td>
                                                 </tr>
                                             </template>
@@ -271,7 +272,7 @@
                         <div class="mt-4 grid grid-cols-3 gap-2">
                             <template x-for="(photo, pIndex) in form.photos" :key="photo.uid">
                                 <div class="group relative aspect-square overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
-                                    <img x-show="photo.url" :src="photo.url" alt="" class="h-full w-full object-cover">
+                                    <img x-show="photo.url" :src="photo.url" alt="" width="200" height="200" class="h-full w-full object-cover">
                                     <div x-show="!photo.url" class="h-full w-full animate-pulse bg-gray-200"></div>
 
                                     <div class="absolute right-1 top-1 z-10">
@@ -322,7 +323,7 @@
                 {{-- Visibilità --}}
                 <div class="bg-white shadow sm:rounded-2xl">
                     <div class="px-4 py-5 sm:p-6">
-                        <h3 class="text-base font-semibold leading-6 text-gray-900">{{ __('Visibilità') }}</h3>
+                        <h3 class="text-base font-semibold leading-6 text-gray-900"><label for="visibility">{{ __('Visibilità') }}</label></h3>
                         <div class="mt-4">
                             <select name="visibility" id="visibility" x-model="form.visibility"
                                     class="block w-full rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm">
@@ -338,7 +339,7 @@
                     <button type="submit" :disabled="loading"
                             class="min-h-11 w-full rounded-xl bg-brand-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 disabled:opacity-50 md:w-auto md:min-w-40">
                         <span x-show="!loading">{{ __('Salva Prodotto') }}</span>
-                        <span x-show="loading">{{ __('Salvataggio...') }}</span>
+                        <span x-show="loading">{{ __('Salvataggio…') }}</span>
                     </button>
                     <a href="{{ route('admin.products.index') }}" class="w-full py-1 text-center text-sm font-semibold text-gray-900 underline hover:text-gray-700 md:w-auto md:px-3">{{ __('Annulla e torna alla lista') }}</a>
                 </div>
@@ -346,12 +347,13 @@
         </div>
 		{{-- Modale scelta foto variante --}}
 		<div x-show="showPhotoPicker" x-cloak
+			 role="dialog" aria-modal="true" aria-labelledby="photo-picker-title"
 			 class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
-			 @click.self="closePhotoPicker()">
+			 @click.self="closePhotoPicker()" @keydown.escape.window="showPhotoPicker && closePhotoPicker()">
 			<div class="max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white p-6 shadow-xl">
 				<div class="mb-4 flex items-center justify-between">
-					<h3 class="text-lg font-semibold text-gray-900">{{ __('Scegli la foto della variante') }}</h3>
-					<button type="button" @click="closePhotoPicker()" class="text-gray-400 hover:text-gray-600">
+					<h3 id="photo-picker-title" class="text-lg font-semibold text-gray-900">{{ __('Scegli la foto della variante') }}</h3>
+					<button type="button" @click="closePhotoPicker()" aria-label="{{ __('Chiudi') }}" class="text-gray-400 hover:text-gray-600">
 						<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
 					</button>
 				</div>
@@ -359,7 +361,7 @@
 					<template x-for="(photo, pIdx) in form.photos" :key="pIdx">
 						<button type="button" @click="selectVariantPhoto(pIdx)"
 								class="group relative aspect-square overflow-hidden rounded border-2 border-transparent hover:border-brand-500">
-							<img :src="photo.url" class="h-full w-full object-cover">
+							<img :src="photo.url" :alt="@js(__('Foto :number')).replace(':number', pIdx + 1)" width="160" height="160" loading="lazy" class="h-full w-full object-cover">
 							<span class="absolute bottom-1 left-1 rounded bg-black/50 px-1.5 py-0.5 text-xs text-white opacity-0 group-hover:opacity-100"
 								  x-text="@js(__('Foto :number')).replace(':number', pIdx + 1)"></span>
 						</button>
@@ -419,6 +421,26 @@ function productForm() {
                 }
                 if (!Array.isArray(v.parts)) v.parts = [];
             });
+
+            // Warn before leaving the page with unsaved changes. The state is
+            // compared with a snapshot taken once the form has rendered; the
+            // warning is skipped while the form is being submitted.
+            this.$nextTick(() => { this.savedState = this.stateSnapshot(); });
+            window.addEventListener('beforeunload', (event) => {
+                if (this.loading || this.savedState === null) return;
+                if (this.stateSnapshot() === this.savedState) return;
+                event.preventDefault();
+                event.returnValue = '';
+            });
+        },
+
+        savedState: null,
+
+        // Serializable view of the form: photos are reduced to their id or
+        // upload id, so large image data is never stringified.
+        stateSnapshot() {
+            const f = this.form;
+            return JSON.stringify({ ...f, photos: f.photos.map(p => p.id ?? p.uid) });
         },
 
         updatePriceCents() {

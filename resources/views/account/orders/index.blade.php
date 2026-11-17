@@ -16,7 +16,7 @@
                     </div>
                     <div class="mt-4 flex items-center justify-between gap-3 border-t border-gray-100 pt-4">
                         <span class="text-sm text-gray-600">{{ $order->items_count }} {{ __('articoli ·') }} {{ $order->paymentMethodLabel() }}</span>
-                        <span class="font-bold text-gray-900">{{ \App\Support\Format::money($order->total_cents) }}</span>
+                        <span class="font-bold text-gray-900 tabular-nums">{{ \App\Support\Format::money($order->total_cents) }}</span>
                     </div>
                 </a>
             @empty

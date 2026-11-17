@@ -15,8 +15,9 @@
     <!-- Assicurati che resources/js/app.js importi Alpine -->
 </head>
 <body class="font-sans antialiased bg-canvas text-gray-900">
+<x-skip-link />
 
-<div x-data="{ sidebarOpen: false }" class="min-h-screen flex flex-col md:flex-row">
+<div x-data="{ sidebarOpen: false }" @keydown.escape.window="sidebarOpen = false" class="min-h-screen flex flex-col md:flex-row">
 
     {{-- Sidebar Desktop --}}
     <aside class="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-40 bg-brand-600">
@@ -220,7 +221,7 @@
         <div class="flex h-full flex-col">
              <div class="flex items-center justify-between border-b border-white/15 px-4 py-3">
                  <span class="text-lg font-bold uppercase text-white">{{ \App\Models\Setting::get('store.name', 'Menu') }}</span>
-                 <button @click="sidebarOpen = false" class="rounded-xl p-2 text-white/85 hover:bg-white/10">
+                 <button type="button" @click="sidebarOpen = false" aria-label="{{ __('Chiudi menu') }}" class="rounded-xl p-2 text-white/85 hover:bg-white/10">
                      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                  </button>
              </div>
@@ -276,7 +277,7 @@
         <header class="sticky top-0 z-20 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 sm:px-6 lg:px-8">
             <div class="flex items-center gap-4">
                 {{-- Hamburger Button Mobile --}}
-                <button @click="sidebarOpen = true" class="rounded-xl p-2 text-gray-500 hover:bg-gray-100 md:hidden">
+                <button type="button" @click="sidebarOpen = true" aria-label="{{ __('Apri menu') }}" :aria-expanded="sidebarOpen.toString()" class="rounded-xl p-2 text-gray-500 hover:bg-gray-100 md:hidden">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                 </button>
                 
@@ -297,7 +298,7 @@
         </header>
 
         {{-- Page Content --}}
-        <main class="grow p-4 pb-32 sm:p-6 sm:pb-32 md:pb-8 lg:p-8">
+        <main id="contenuto" class="grow p-4 pb-32 sm:p-6 sm:pb-32 md:pb-8 lg:p-8">
             @yield('content')
         </main>
         

@@ -21,7 +21,7 @@
         </form>
 
         <p class="mt-4 text-center text-sm text-gray-500">
-            {{ __('Se sei stato tu, non fare nulla: questo link scade il :expires_at.', ['expires_at' => $change->expires_at->format('d/m/Y \a\l\l\e H:i')]) }}
+            {{ __('Se sei stato tu, non fare nulla: questo link scade il :expires_at.', ['expires_at' => $change->expires_at->locale(app()->getLocale())->isoFormat('LLL')]) }}
         </p>
     @elseif ($state === 'revoked')
         <div class="text-center">

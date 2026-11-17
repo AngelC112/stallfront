@@ -52,18 +52,18 @@
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         {{-- Inizio Periodo --}}
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Inizio Periodo') }}</label>
-                            <div class="grid grid-cols-3 gap-2">
+                            <span id="season-start-label" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Inizio Periodo') }}</span>
+                            <div class="grid grid-cols-3 gap-2" role="group" aria-labelledby="season-start-label">
                                 {{-- Giorno --}}
-                                <select name="season_start_day" class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
-                                    <option value="">{{ __('Giorn') }}</option>
+                                <select name="season_start_day" aria-label="{{ __('Giorno') }}" class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
+                                    <option value="">{{ __('Giorno') }}</option>
                                     @for($d=1;$d<=31;$d++)
                                         <option value="{{ $d }}" @selected(old('season_start_day', $category->season_start_day) == $d)>{{ $d }}</option>
                                     @endfor
                                 </select>
                                 
                                 {{-- Mese (ITALIANO) --}}
-                                <select name="season_start_month" class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
+                                <select name="season_start_month" aria-label="{{ __('Mese') }}" class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
                                     <option value="">{{ __('Mese') }}</option>
                                     @foreach(range(1,12) as $m)
                                         {{-- Usiamo Carbon per ottenere il nome in Italiano --}}
@@ -74,7 +74,7 @@
                                 </select>
 
                                 {{-- Anno (Facoltativo) --}}
-                                <input type="number" name="season_start_year" min="2000" max="2100" placeholder="{{ __('Anno*') }}" 
+                                <input type="number" name="season_start_year" aria-label="{{ __('Anno') }}" min="2000" max="2100" placeholder="{{ __('Anno*') }}" 
                                        value="{{ old('season_start_year', $category->season_start_year) }}"
                                        class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
                             </div>
@@ -83,18 +83,18 @@
 
                         {{-- Fine Periodo --}}
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('Fine Periodo') }}</label>
-                            <div class="grid grid-cols-3 gap-2">
+                            <span id="season-end-label" class="block text-sm font-medium text-gray-700 mb-1">{{ __('Fine Periodo') }}</span>
+                            <div class="grid grid-cols-3 gap-2" role="group" aria-labelledby="season-end-label">
                                 {{-- Giorno --}}
-                                <select name="season_end_day" class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
-                                    <option value="">{{ __('Giorn') }}</option>
+                                <select name="season_end_day" aria-label="{{ __('Giorno') }}" class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
+                                    <option value="">{{ __('Giorno') }}</option>
                                     @for($d=1;$d<=31;$d++)
                                         <option value="{{ $d }}" @selected(old('season_end_day', $category->season_end_day) == $d)>{{ $d }}</option>
                                     @endfor
                                 </select>
                                 
                                 {{-- Mese (ITALIANO) --}}
-                                <select name="season_end_month" class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
+                                <select name="season_end_month" aria-label="{{ __('Mese') }}" class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
                                     <option value="">{{ __('Mese') }}</option>
                                     @foreach(range(1,12) as $m)
                                         <option value="{{ $m }}" @selected(old('season_end_month', $category->season_end_month) == $m)>
@@ -104,7 +104,7 @@
                                 </select>
 
                                 {{-- Anno (Facoltativo) --}}
-                                <input type="number" name="season_end_year" min="2000" max="2100" placeholder="{{ __('Anno*') }}" 
+                                <input type="number" name="season_end_year" aria-label="{{ __('Anno') }}" min="2000" max="2100" placeholder="{{ __('Anno*') }}" 
                                        value="{{ old('season_end_year', $category->season_end_year) }}"
                                        class="rounded-xl border-gray-300 shadow-sm focus:border-brand-500 focus:ring-brand-500 sm:text-sm col-span-1">
                             </div>

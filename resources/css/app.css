@@ -173,3 +173,22 @@ button:not(:disabled) {
 button:disabled {
     cursor: not-allowed;
 }
+
+/* When the system asks for less motion, transitions and animations
+   (Alpine x-transition, pulses, slide-ins) finish at once.
+   Spinners keep turning, slower, so a loading state never looks frozen. */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .animate-spin {
+        animation-duration: 1.5s !important;
+        animation-iteration-count: infinite !important;
+    }
+}

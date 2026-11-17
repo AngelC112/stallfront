@@ -59,13 +59,13 @@
                         @endif
                         <p class="mt-1 text-gray-500">{{ $item->quantity }} × {{ \App\Support\Format::money($item->unit_price_cents) }}</p>
                     </div>
-                    <p class="font-semibold text-gray-900">{{ \App\Support\Format::money($item->line_total_cents) }}</p>
+                    <p class="font-semibold text-gray-900 tabular-nums">{{ \App\Support\Format::money($item->line_total_cents) }}</p>
                 </div>
             @endforeach
         </div>
         <div class="mt-4 flex justify-between border-t border-gray-200 pt-4 font-bold text-gray-900">
             <span>{{ __('Totale da incassare') }}</span>
-            <span>{{ \App\Support\Format::money($order->total_cents) }}</span>
+            <span class="tabular-nums">{{ \App\Support\Format::money($order->total_cents) }}</span>
         </div>
     </section>
 

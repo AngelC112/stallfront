@@ -12,6 +12,7 @@
         <x-pwa-head />
     </head>
     <body class="font-sans antialiased">
+        <x-skip-link />
         <div class="min-h-screen bg-canvas">
             @include('layouts.navigation')
 
@@ -25,7 +26,7 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
+            <main id="contenuto">
                 {{ $slot }}
             </main>
         </div>

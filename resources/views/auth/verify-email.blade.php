@@ -33,6 +33,7 @@
         <div x-data="{ open: false }">
             <button type="button"
                     @click="open = !open"
+                    :aria-expanded="open.toString()"
                     class="text-sm text-gray-600 underline hover:text-gray-900">
                 {{ __('Cambia indirizzo email') }}
             </button>
@@ -41,7 +42,8 @@
                   class="mt-3 flex items-start gap-2">
                 @csrf
                 <div class="flex-1">
-                    <x-text-input name="email" type="email" required
+                    <label for="verify-new-email" class="sr-only">{{ __('Nuovo indirizzo email') }}</label>
+                    <x-text-input id="verify-new-email" name="email" type="email" required autocomplete="email"
                                   :value="old('email', auth()->user()->email)"
                                   class="block w-full" />
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />

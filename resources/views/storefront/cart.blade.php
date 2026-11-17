@@ -9,10 +9,11 @@
     </head>
     @php($money = fn (int $cents): string => \App\Support\Format::money($cents))
     <body @class(['bg-canvas text-gray-900 antialiased', 'pb-28 lg:pb-0' => $items->isNotEmpty()])>
+        <x-skip-link />
         <x-checkout-steps :step="1" />
 
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start lg:gap-8">
-            <main class="space-y-4">
+            <main id="contenuto" class="space-y-4">
                 <div class="flex items-center justify-between gap-3">
                     <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">{{ __('Il tuo carrello') }}</h1>
                     <a href="{{ route('home') }}" class="text-sm font-semibold text-brand-600 hover:underline">{{ __('‹ Continua gli acquisti') }}</a>
@@ -36,7 +37,7 @@
                         <article class="flex items-center gap-3 rounded-2xl border border-gray-200 bg-white p-3 sm:gap-5 sm:p-4">
                             <a href="{{ route('storefront.product', ['product' => $item['product']]) }}" class="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-brand-100 sm:h-24 sm:w-24">
                                 @if ($item['image'])
-                                    <img src="{{ $item['image'] }}" alt="{{ $item['product']->name }}" class="h-full w-full object-cover">
+                                    <img src="{{ $item['image'] }}" alt="{{ $item['product']->name }}" width="96" height="96" loading="lazy" decoding="async" class="h-full w-full object-cover">
                                 @endif
                             </a>
 
@@ -48,7 +49,7 @@
                                 @if ($item['offSeasonDays'] > 0)
                                     <p class="text-sm text-gray-500">{{ __('Fuori stagione: pronto in :off_season_days giorni', ['off_season_days' => $item['offSeasonDays']]) }}</p>
                                 @endif
-                                <p class="text-sm text-gray-500 sm:hidden">{{ $money($item['lineTotalCents']) }}</p>
+                                <p class="text-sm text-gray-500 sm:hidden tabular-nums">{{ $money($item['lineTotalCents']) }}</p>
                                 <form method="POST" action="{{ route('cart.destroy', ['lineKey' => $item['key']]) }}" class="mt-1">
                                     @csrf
                                     @method('DELETE')
@@ -56,7 +57,7 @@
                                 </form>
                             </div>
 
-                            <p class="hidden shrink-0 text-lg font-bold text-gray-900 sm:block">{{ $money($item['lineTotalCents']) }}</p>
+                            <p class="hidden shrink-0 text-lg font-bold text-gray-900 sm:block tabular-nums">{{ $money($item['lineTotalCents']) }}</p>
 
                             <div class="flex shrink-0 items-center gap-2 sm:gap-3">
                                 @if ($item['quantity'] > 1)
@@ -100,11 +101,11 @@
                         <h2 class="hidden text-lg font-bold text-gray-900 lg:block">{{ __('Riepilogo') }}</h2>
                         <div class="hidden justify-between border-b border-gray-200 py-3 text-gray-800 lg:flex">
                             <span>{{ __('Prodotti (:cart_count)', ['cart_count' => $cartCount]) }}</span>
-                            <span class="font-bold">{{ $money($totalCents) }}</span>
+                            <span class="font-bold tabular-nums">{{ $money($totalCents) }}</span>
                         </div>
                         <div class="flex items-baseline justify-between gap-3 lg:pt-4">
                             <span class="text-lg text-gray-900 lg:text-xl lg:font-bold">{{ __('Totale da pagare al ritiro') }}</span>
-                            <span class="text-2xl font-bold text-brand-600">{{ $money($totalCents) }}</span>
+                            <span class="text-2xl font-bold text-brand-600 tabular-nums">{{ $money($totalCents) }}</span>
                         </div>
                         <div class="hidden lg:block">
                             @auth

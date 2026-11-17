@@ -8,9 +8,10 @@
         <x-pwa-head />
     </head>
     <body class="bg-canvas text-gray-900 antialiased">
+        <x-skip-link />
         <x-checkout-steps :step="2" />
 
-        <main class="mx-auto max-w-6xl px-4 py-6 sm:px-5 sm:py-10">
+        <main id="contenuto" class="mx-auto max-w-6xl px-4 py-6 sm:px-5 sm:py-10">
             <div class="mb-7">
                 <p class="text-xs font-semibold uppercase tracking-[0.16em] text-brand-600">{{ __('Ultimo passaggio') }}</p>
                 <h1 class="mt-1 text-3xl font-black text-gray-900 sm:text-4xl">{{ __('Dove ritirare o ricevere l’ordine') }}</h1>
@@ -127,14 +128,14 @@
                                     @endif
                                     <p class="mt-1 text-slate-500">{{ $item['quantity'] }} × {{ \App\Support\Format::money($item['unitPriceCents']) }}</p>
                                 </div>
-                                <p class="shrink-0 font-semibold text-gray-900">{{ \App\Support\Format::money($item['lineTotalCents']) }}</p>
+                                <p class="shrink-0 font-semibold text-gray-900 tabular-nums">{{ \App\Support\Format::money($item['lineTotalCents']) }}</p>
                             </div>
                         @endforeach
                     </div>
                     <div class="mt-4 border-t border-brand-200 pt-4">
                         <div class="flex justify-between text-base font-black text-gray-900">
                             <span>Prodotti</span>
-                            <span>{{ \App\Support\Format::money($subtotalCents) }}</span>
+                            <span class="tabular-nums">{{ \App\Support\Format::money($subtotalCents) }}</span>
                         </div>
                         @if ($canDeliver && $deliveryCostCents > 0)
                             <p class="mt-2 text-xs text-slate-500">Il costo di consegna si applica solo scegliendo la consegna a domicilio.</p>

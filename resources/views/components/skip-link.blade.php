@@ -1,0 +1,2 @@
+{{-- Link that lets keyboard users jump past the navigation to the page content (#contenuto). It stays hidden until it receives focus. --}}
+<a href="#contenuto" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-brand-700 focus:shadow-lg focus:outline-2 focus:outline-brand-600">{{ __('Vai al contenuto') }}</a>

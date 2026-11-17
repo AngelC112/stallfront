@@ -1,5 +1,6 @@
 @props(['cartCount' => 0, 'search' => '', 'active' => null, 'showCart' => true])
 @php($storeName = \App\Models\Setting::get('store.name', config('app.name')))
+<x-skip-link />
 <header class="border-b border-gray-200 bg-white">
     <div class="mx-auto flex max-w-7xl items-center gap-2 px-4 py-3 sm:gap-4 sm:px-6 lg:gap-8">
         <a href="{{ route('home') }}" class="min-w-0 truncate text-xl font-bold uppercase text-brand-600 sm:text-2xl">{{ $storeName }}</a>

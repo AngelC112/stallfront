@@ -102,19 +102,19 @@
                                 @endif
                                 <p class="mt-1 text-sm text-gray-500">{{ $item->quantity }} × {{ \App\Support\Format::money($item->unit_price_cents) }}</p>
                             </div>
-                            <p class="shrink-0 font-semibold text-gray-900">{{ \App\Support\Format::money($item->line_total_cents) }}</p>
+                            <p class="shrink-0 font-semibold text-gray-900 tabular-nums">{{ \App\Support\Format::money($item->line_total_cents) }}</p>
                         </div>
                     @endforeach
                 </div>
                 @if ($order->delivery_cost_cents > 0)
                     <div class="flex justify-between border-t border-gray-100 py-3 text-sm text-gray-600">
                         <span>{{ __('Consegna') }}</span>
-                        <span>{{ \App\Support\Format::money($order->delivery_cost_cents) }}</span>
+                        <span class="tabular-nums">{{ \App\Support\Format::money($order->delivery_cost_cents) }}</span>
                     </div>
                 @endif
                 <div class="flex justify-between border-t border-gray-200 pt-4 text-lg font-bold text-gray-900">
                     <span>{{ __('Totale da pagare') }}</span>
-                    <span>{{ \App\Support\Format::money($order->total_cents) }}</span>
+                    <span class="tabular-nums">{{ \App\Support\Format::money($order->total_cents) }}</span>
                 </div>
                 <p class="mt-3 text-sm text-gray-500">{{ $order->fulfillment_method === 'delivery' ? __('Il pagamento avverrà al momento della consegna.') : __('Il pagamento avverrà al ritiro.') }}</p>
             </section>

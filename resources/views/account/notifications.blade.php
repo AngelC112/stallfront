@@ -101,7 +101,7 @@
                     </div>
 
                     <div data-state="ios-install" class="hidden space-y-4">
-                        <img src="{{ asset('icons/icon-192.png') }}" alt="" class="mx-auto h-16 w-16 rounded-2xl">
+                        <img src="{{ asset('icons/icon-192.png') }}" alt="" width="64" height="64" class="mx-auto h-16 w-16 rounded-2xl">
                         <h3 class="text-xl font-bold text-gray-900">{{ __('Aggiungi il sito alla schermata Home') }}</h3>
                         <p class="text-gray-700">{{ __('Su iPhone gli avvisi funzionano solo dall’icona del sito sulla Home. Sono 3 passi e ci vuole meno di un minuto.') }}</p>
                         <ol class="space-y-3 rounded-2xl border border-gray-200 p-4 text-left text-gray-800">

@@ -15,7 +15,8 @@
         <x-store-header :cart-count="$cartCount" :search="$search" active="home" :show-cart="false" />
 
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:grid lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start lg:gap-8">
-            <main class="space-y-5">
+            <main id="contenuto" class="space-y-5">
+                <h1 class="sr-only">{{ \App\Models\Setting::get('store.name', config('app.name')) }}</h1>
                 @if (session('status'))
                     <p class="rounded-xl border border-[#9fcfb4] bg-[#dff0e6] px-4 py-3 text-sm font-semibold text-[#14532d]" role="status">{{ session('status') }}</p>
                 @endif
@@ -98,7 +99,7 @@
                                 <article class="flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white">
                                     <a href="{{ $productUrl }}" aria-label="Apri {{ $product->name }}" class="relative block aspect-[4/3] bg-brand-100">
                                         @if ($cover)
-                                            <img src="{{ $cover }}" alt="{{ $product->name }}" @class(['h-full w-full object-cover', 'opacity-60' => $state['soldOut']]) />
+                                            <img src="{{ $cover }}" alt="{{ $product->name }}" width="800" height="600" loading="lazy" decoding="async" @class(['h-full w-full object-cover', 'opacity-60' => $state['soldOut']]) />
                                         @else
                                             <span class="flex h-full items-center justify-center text-sm text-gray-500">{{ __('Foto prodotto') }}</span>
                                         @endif
