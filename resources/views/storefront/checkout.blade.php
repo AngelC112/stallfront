@@ -67,15 +67,15 @@
                                 <span class="min-w-0">
                                     <span class="block font-semibold text-gray-900">{{ $marketDate['market_name'] }} · {{ \Illuminate\Support\Carbon::parse($marketDate['pickup_date'])->isoFormat('L') }}</span>
                                     <span class="mt-1 block text-sm text-slate-600">{{ $marketDate['location'] }} · {{ $marketDate['weekday_label'] }}</span>
-                                    <span class="mt-1 block text-xs text-slate-500">Ordina entro {{ $marketDate['deadline']->isoFormat('L LT') }}</span>
+                                    <span class="mt-1 block text-xs text-slate-500">{{ __('Ordina entro :deadline', ['deadline' => $marketDate['deadline']->isoFormat('L LT')]) }}</span>
                                 </span>
                             </label>
                         @empty
-                            <p class="mt-4 rounded-xl bg-amber-50 p-4 text-sm text-amber-900">Al momento non ci sono date di ritiro prenotabili per i prodotti nel carrello. Contatta il negozio per informazioni.</p>
+                            <p class="mt-4 rounded-xl bg-amber-50 p-4 text-sm text-amber-900">{{ __('Al momento non ci sono date di ritiro prenotabili per i prodotti nel carrello. Contatta il negozio per informazioni.') }}</p>
                         @endforelse
                         @if ($unavailableDates->isNotEmpty())
                             <div class="mt-4 space-y-2" aria-label="{{ __('Date non disponibili') }}">
-                                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Date non disponibili</p>
+                                <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Date non disponibili') }}</p>
                                 @foreach ($unavailableDates as $unavailable)
                                     <div class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-3 text-sm text-slate-400" aria-disabled="true">
                                         <span>{{ $unavailable['market_name'] }} · {{ \Illuminate\Support\Carbon::parse($unavailable['pickup_date'])->isoFormat('L') }}</span>
@@ -87,37 +87,37 @@
                         @error('pickup_option')
                             <p class="mt-3 text-sm text-red-700">{{ $message }}</p>
                         @enderror
-                        <p class="mt-3 text-sm text-slate-500">Il pagamento avverrà in negozio al momento del ritiro.</p>
+                        <p class="mt-3 text-sm text-slate-500">{{ __('Il pagamento avverrà in negozio al momento del ritiro.') }}</p>
                     </section>
 
                     @if ($canDeliver)
                         <section x-show="fulfillmentMethod === 'delivery'" class="rounded-xl border border-brand-200 bg-white p-4 sm:p-6">
-                            <h2 class="text-lg font-bold text-gray-900">Indirizzo di consegna</h2>
-                            <label for="delivery-address" class="mt-4 block text-sm font-medium text-slate-700">Indirizzo completo</label>
+                            <h2 class="text-lg font-bold text-gray-900">{{ __('Indirizzo di consegna') }}</h2>
+                            <label for="delivery-address" class="mt-4 block text-sm font-medium text-slate-700">{{ __('Indirizzo completo') }}</label>
                             <textarea id="delivery-address" name="delivery_address" rows="3" maxlength="1000" x-bind:required="fulfillmentMethod === 'delivery'" x-bind:disabled="fulfillmentMethod !== 'delivery'" class="mt-1 block w-full rounded-xl border-brand-200 bg-white px-3 py-3 text-base">{{ old('delivery_address', $customer->address) }}</textarea>
-                            <label for="delivery-phone" class="mt-4 block text-sm font-medium text-slate-700">Telefono per la consegna</label>
+                            <label for="delivery-phone" class="mt-4 block text-sm font-medium text-slate-700">{{ __('Telefono per la consegna') }}</label>
                             <input id="delivery-phone" type="tel" name="delivery_phone" value="{{ old('delivery_phone', $customer->phone) }}" maxlength="30" x-bind:required="fulfillmentMethod === 'delivery'" x-bind:disabled="fulfillmentMethod !== 'delivery'" class="mt-1 block w-full rounded-xl border-brand-200 bg-white px-3 py-3 text-base sm:max-w-sm">
-                            <p class="mt-2 text-sm text-slate-500">Il pagamento avverrà alla consegna. Costo: {{ \App\Support\Format::money($deliveryCostCents) }}.</p>
+                            <p class="mt-2 text-sm text-slate-500">{{ __('Il pagamento avverrà alla consegna. Costo: :cost.', ['cost' => \App\Support\Format::money($deliveryCostCents)]) }}</p>
                             @if ($deliveryMinCents > 0)
-                                <p class="mt-1 text-sm text-slate-500">Importo minimo per la consegna: {{ \App\Support\Format::money($deliveryMinCents) }}.</p>
+                                <p class="mt-1 text-sm text-slate-500">{{ __('Importo minimo per la consegna: :amount.', ['amount' => \App\Support\Format::money($deliveryMinCents)]) }}</p>
                             @endif
                         </section>
                     @endif
 
                     <section class="rounded-xl border border-brand-200 bg-white p-4 sm:p-6">
-                        <label for="customer-note" class="block text-sm font-semibold text-gray-900">Nota per il venditore (facoltativa)</label>
+                        <label for="customer-note" class="block text-sm font-semibold text-gray-900">{{ __('Nota per il venditore (facoltativa)') }}</label>
                         <textarea id="customer-note" name="customer_note" rows="3" maxlength="2000" class="mt-2 block w-full rounded-xl border-brand-200 bg-white px-3 py-3 text-base">{{ old('customer_note') }}</textarea>
                     </section>
 
-                    <p class="rounded-xl bg-brand-50 p-3 text-sm text-brand-700">Abbiamo riservato i tuoi prodotti fino alle {{ $reservedUntil->format('H:i') }}. Conferma entro quell’ora per non perderli.</p>
+                    <p class="rounded-xl bg-brand-50 p-3 text-sm text-brand-700">{{ __('Abbiamo riservato i tuoi prodotti fino alle :time. Conferma entro quell’ora per non perderli.', ['time' => $reservedUntil->isoFormat('LT')]) }}</p>
 
                     <button type="submit" class="flex min-h-12 w-full items-center justify-center rounded-xl bg-brand-700 px-5 py-3 text-base font-bold text-white shadow-sm transition hover:bg-brand-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-700 focus-visible:ring-offset-2">
-                        Conferma ordine
+                        {{ __('Conferma ordine') }}
                     </button>
                 </form>
 
                 <aside class="h-fit rounded-xl border border-brand-200 bg-white p-4 sm:p-6 lg:sticky lg:top-6">
-                    <h2 class="text-lg font-bold text-gray-900">Riepilogo</h2>
+                    <h2 class="text-lg font-bold text-gray-900">{{ __('Riepilogo') }}</h2>
                     <div class="mt-4 divide-y divide-brand-100">
                         @foreach ($items as $item)
                             <div class="flex justify-between gap-4 py-3 text-sm">
@@ -134,13 +134,13 @@
                     </div>
                     <div class="mt-4 border-t border-brand-200 pt-4">
                         <div class="flex justify-between text-base font-black text-gray-900">
-                            <span>Prodotti</span>
+                            <span>{{ __('Prodotti') }}</span>
                             <span class="tabular-nums">{{ \App\Support\Format::money($subtotalCents) }}</span>
                         </div>
                         @if ($canDeliver && $deliveryCostCents > 0)
-                            <p class="mt-2 text-xs text-slate-500">Il costo di consegna si applica solo scegliendo la consegna a domicilio.</p>
+                            <p class="mt-2 text-xs text-slate-500">{{ __('Il costo di consegna si applica solo scegliendo la consegna a domicilio.') }}</p>
                         @endif
-                        <p class="mt-3 text-xs leading-5 text-slate-500">Non è previsto alcun pagamento online: pagherai al ritiro o alla consegna.</p>
+                        <p class="mt-3 text-xs leading-5 text-slate-500">{{ __('Non è previsto alcun pagamento online: pagherai al ritiro o alla consegna.') }}</p>
                     </div>
                 </aside>
             </div>

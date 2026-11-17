@@ -206,7 +206,7 @@
 													</td>
                                                     <template x-for="(type, tIndex) in form.types" :key="'td'+tIndex+vIndex">
                                                         <td class="px-3 py-2">
-                                                            <input type="text" list="datalist-type-'+tIndex"
+                                                            <input type="text" :list="'datalist-type-'+tIndex"
                                                                    :aria-label="type.name || @js(__('Caratt. :number')).replace(':number', tIndex + 1)"
                                                                    :value="variant.parts[tIndex] || ''"
                                                                    @input="variant.parts[tIndex] = $event.target.value; refreshVariantLabel(variant)"
